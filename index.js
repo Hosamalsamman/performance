@@ -6,33 +6,27 @@ import bcrypt from "bcrypt";
 import cors from "cors";
 import { differenceInDays } from 'date-fns';
 import { and } from "sequelize";
+import dotenv;
 
+dotenv.config();
 const app = express();
 const port = 3000;
-// const myPassword = "mcnz nobk sfuo gvcy";
-const saltRounds = 5;
+const saltRounds = process.env.SALT_ROUNDS;
 
 const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "flutter",
-  password: "159851",
-  port: 5432,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
 });
 db.connect();
-
-// const transporter = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//     user: 'abackend51@gmail.com',
-//     pass: myPassword
-//   }
-// });
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+// reserved id as an inintial value.
 let current_user_id = 2;
 
 app.get("/register", async (req, res) => {
